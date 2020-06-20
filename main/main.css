@@ -1,0 +1,95 @@
+html {
+    -webkit-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+}
+
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    display: block;
+    box-align: center;
+    font-family: "NotoSans", Sans-serif;
+    cursor: none;
+}
+
+canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+h4 {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+}
+
+.cursor {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
+.expand {
+    animation: cursorAnim .5s forwards;
+}
+
+@keyframes cursorAnim {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+    100% {
+        transform: scale(1.5);
+    }
+}
+
+#BLM {
+    position: absolute;
+    left: 10px;
+    top: 87%;
+    color: black;
+    font-family: Helvetica, sans-serif;
+    font-size: 25px;
+    padding: 1em;
+}
+
+#SY {
+    position: absolute;
+    left: 10px;
+    top: 91%;
+    color: black;
+    font-family: Helvetica, sans-serif;
+    font-size: 25px;
+    padding: 1em;
+}
+
+body.cursor * {
+    cursor: inherit !important;
+}
+
+body.cursor a,
+body.cursor button,
+body.cursor .hover {
+    cursor: pointer !important;
+}
+
+body.cursor #g_cursor {
+    display: none !important;
+}
+
+body.cursor #g_cursor.drag {
+    display: block !important;
+}
+
+body.cursor #g_cursor.slide {
+    display: block !important;
+}

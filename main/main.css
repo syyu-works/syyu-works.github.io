@@ -55,12 +55,15 @@ h4 {
 
 #BLM {
     position: absolute;
-    left: 30%;
+    left: center;
     top: 10px;
+    margin-left: 22%;
     color: black;
-    font-family: Helvetica, sans-serif;
-    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
     padding: 1em;
+    line-height: 1.5em;
+    text-align: left;
 }
 
 #SY {

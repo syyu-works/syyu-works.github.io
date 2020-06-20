@@ -55,9 +55,8 @@ h4 {
 
 #BLM {
     position: absolute;
-    left: center;
+    left: 22%;
     top: 10px;
-    margin-left: 22%;
     color: black;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
@@ -68,8 +67,8 @@ h4 {
 
 #SY {
     position: absolute;
-    left: 37%;
-    top: 28px;
+    left: 22.3%;
+    top: 46px;
     color: black;
     font-family: Helvetica, sans-serif;
     font-size: 15px;

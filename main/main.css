@@ -13,6 +13,7 @@ body {
     box-align: center;
     font-family: "NotoSans", Sans-serif;
     cursor: none;
+    overflow: hidden;
 }
 
 canvas {
@@ -54,8 +55,8 @@ h4 {
 
 #BLM {
     position: absolute;
-    left: 10px;
-    top: 87%;
+    left: 30%;
+    top: 10px;
     color: black;
     font-family: Helvetica, sans-serif;
     font-size: 25px;
@@ -64,11 +65,11 @@ h4 {
 
 #SY {
     position: absolute;
-    left: 10px;
-    top: 91%;
+    left: 37%;
+    top: 28px;
     color: black;
     font-family: Helvetica, sans-serif;
-    font-size: 25px;
+    font-size: 15px;
     padding: 1em;
 }
 

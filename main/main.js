@@ -3,26 +3,27 @@ main();
 //
 // Start here
 //
-function main() {
-    const canvas = document.querySelector('#glcanvas');
-    const gl = canvas.getContext('webgl');
 
-    // If we don't have a GL context, give up now
+function main() {
+    const canvas = document.getElementById("glcanvas");
+    const gl = canvas.getContext("webgl");
 
     if (!gl) {
-        alert('Unable to initialize WebGL. Your browser or machine may not support it.');
+        alert(
+            "Unable to initialize WebGL. Your browser or machine may not support it."
+        );
         return;
     }
 
     // Vertex shader program
 
-    const vsSource = `
+    var vsSource = `
     attribute vec4 aVertexPosition;
     attribute vec4 aVertexColor;
 
     uniform mat4 uModelViewMatrix;
     uniform mat4 uProjectionMatrix;
-
+    uniform vec2 mouse;
     varying lowp vec4 vColor;
 
     void main(void) {
@@ -41,71 +42,70 @@ function main() {
     }
   `;
 
-    // Initialize a shader program; this is where all the lighting
-    // for the vertices and so forth is established.
     const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
 
-    // Collect all the info needed to use the shader program.
-    // Look up which attributes our shader program is using
-    // for aVertexPosition, aVevrtexColor and also
-    // look up uniform locations.
     const programInfo = {
         program: shaderProgram,
         attribLocations: {
-            vertexPosition: gl.getAttribLocation(shaderProgram, 'aVertexPosition'),
-            vertexColor: gl.getAttribLocation(shaderProgram, 'aVertexColor'),
+            vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+            vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor")
         },
         uniformLocations: {
-            projectionMatrix: gl.getUniformLocation(shaderProgram, 'uProjectionMatrix'),
-            modelViewMatrix: gl.getUniformLocation(shaderProgram, 'uModelViewMatrix'),
-        },
+            projectionMatrix: gl.getUniformLocation(
+                shaderProgram,
+                "uProjectionMatrix"
+            ),
+            modelViewMatrix: gl.getUniformLocation(shaderProgram, "uModelViewMatrix")
+        }
     };
 
-    // Here's where we call the routine that builds all the
-    // objects we'll be drawing.
+    var aVertexPosition = gl.getAttribLocation(shaderProgram, "aVertexPosition");
+
+    var g_points = []; // The array for the position of a mouse press
+
+    function click(ev, gl, canvas, a_Position) {
+        var x = ev.clientX; // x coordinate of a mouse pointer
+        var y = ev.clientY; // y coordinate of a mouse pointer
+        var rect = ev.target.getBoundingClientRect();
+        console.log(rect);
+    };
+
+    // console.log(gl);
+    // gl.canvas.onmousedown = function(ev) {
+    //   console.log(ev);
+    // };
+
     const buffers = initBuffers(gl);
 
-    // Draw the scene
     drawScene(gl, programInfo, buffers);
 }
 
-//
-// initBuffers
-//
-// Initialize the buffers we'll need. For this demo, we just
-// have one object -- a simple two-dimensional square.
-//
 function initBuffers(gl) {
-
-    // Create a buffer for the square's positions.
-
     const positionBuffer = gl.createBuffer();
-
-    // Select the positionBuffer as the one to apply buffer
-    // operations to from here out.
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
-    // Now create an array of positions for the square.
-
-    const positions = [
-        2.5, 1.0, -2.5, 1.0,
-        2.5, -1.0, -2.5, -1.0,
-    ];
-
-    // Now pass the list of positions into WebGL to build the
-    // shape. We do this by creating a Float32Array from the
-    // JavaScript array, then use it to fill the current buffer.
+    const positions = [4.0, 5.0, -5.5, 5.0, 4.0, -5.0, -5.5, -5.0];
 
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-    // Now set up the colors for the vertices
-
     var colors = [
-        0.14, 0.12, 0.1, 0.9, // 우상
-        1.0, 0.9, 0.8, 1.0, // 좌상
-        0.2, 0.2, 0.2, 1.0, // 우하
-        1.0, 0.9, 0.9, 1.0, // 좌하
+        0.0,
+        0.0,
+        0.0,
+        1.0, // 우상
+        0.8,
+        0.7,
+        0.6,
+        1.0, // 좌상
+        0.4,
+        0.25,
+        0.3,
+        1.0, // 우하
+        1.0,
+        0.9,
+        0.9,
+        1.0 // 좌하
     ];
 
     const colorBuffer = gl.createBuffer();
@@ -114,61 +114,43 @@ function initBuffers(gl) {
 
     return {
         position: positionBuffer,
-        color: colorBuffer,
+        color: colorBuffer
     };
 }
 
-//
-// Draw the scene.
-//
-
+gl.canvas.onmousedown = function(ev) {
+    click(ev, gl, canvas, a_position);
+    drawScene();
+};
 
 function drawScene(gl, programInfo, buffers) {
     gl.canvas.width = window.innerWidth;
     gl.canvas.height = window.innerHeight;
-    gl.clearColor(1.0, 1.0, 1.0, 1.0); // Clear to black, fully opaque
+    gl.clearColor(0.0, 0.0, 0.0, 0.0); // Clear to black, fully opaque
     gl.clearDepth(1.0); // Clear everything
-    gl.enable(gl.DEPTH_TEST); // Enable depth testing
-    gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    // Clear the canvas before we start drawing on it.
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    // Create a perspective matrix, a special matrix that is
-    // used to simulate the distortion of perspective in a camera.
-    // Our field of view is 45 degrees, with a width/height
-    // ratio that matches the display size of the canvas
-    // and we only want to see objects between 0.1 units
-    // and 100 units away from the camera.
-
-    const fieldOfView = 45 * Math.PI / 180; // in radians
+    const fieldOfView = (45 * Math.PI) / 180; // in radians
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.1;
     const zFar = 100.0;
     const projectionMatrix = mat4.create();
 
-    // note: glmatrix.js always has the first argument
-    // as the destination to receive the result.
-    mat4.perspective(projectionMatrix,
-        fieldOfView,
-        aspect,
-        zNear,
-        zFar);
+    mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-    // Set the drawing position to the "identity" point, which is
-    // the center of the scene.
     const modelViewMatrix = mat4.create();
 
-    // Now move the drawing position a bit to where we want to
-    // start drawing the square.
-
-    mat4.translate(modelViewMatrix, // destination matrix
+    // var translation = vec3.create();
+    //vec3.set(translation, [0.0, 0.0, -5.0])
+    mat4.translate(
+        modelViewMatrix, // destination matrix
         modelViewMatrix, // matrix to translate
-        [-0.0, 0.0, -6.0]); // amount to translate
+        [0.0, 0.0, -5.0]); // amount to translate
 
-    // Tell WebGL how to pull out the positions from the position
-    // buffer into the vertexPosition attribute
     {
         const numComponents = 2;
         const type = gl.FLOAT;
@@ -182,13 +164,11 @@ function drawScene(gl, programInfo, buffers) {
             type,
             normalize,
             stride,
-            offset);
-        gl.enableVertexAttribArray(
-            programInfo.attribLocations.vertexPosition);
+            offset
+        );
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
     }
 
-    // Tell WebGL how to pull out the colors from the color buffer
-    // into the vertexColor attribute.
     {
         const numComponents = 4;
         const type = gl.FLOAT;
@@ -202,9 +182,9 @@ function drawScene(gl, programInfo, buffers) {
             type,
             normalize,
             stride,
-            offset);
-        gl.enableVertexAttribArray(
-            programInfo.attribLocations.vertexColor);
+            offset
+        );
+        gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
     }
 
     // Tell WebGL to use our program when drawing
@@ -216,11 +196,13 @@ function drawScene(gl, programInfo, buffers) {
     gl.uniformMatrix4fv(
         programInfo.uniformLocations.projectionMatrix,
         false,
-        projectionMatrix);
+        projectionMatrix
+    );
     gl.uniformMatrix4fv(
         programInfo.uniformLocations.modelViewMatrix,
         false,
-        modelViewMatrix);
+        modelViewMatrix
+    );
 
     {
         const offset = 0;
@@ -229,24 +211,6 @@ function drawScene(gl, programInfo, buffers) {
     }
 }
 
-function createTexture() {
-    var ctx = txtImg.getContext("2d");
-    ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    ctx.save();
-
-    ctx.font = "bold 20px Arial";
-    var str = "www.jrr.kr";
-
-    ctx.fillStyle = "rgb(255, 150, 00)";
-    ctx.fillText(str, (ctx.canvas.width - ctx.measureText(str).width) / 2, 72);
-    ctx.restore();
-
-    g_Texture = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, g_Texture);
-    gl.texImage2D(gl.TEXTURE_2D, 0, txtImg, true);
-    gl.generateMipmap(gl.TEXTURE_2D);
-}
 //
 // Initialize a shader program, so WebGL knows how to draw our data
 //
@@ -264,7 +228,10 @@ function initShaderProgram(gl, vsSource, fsSource) {
     // If creating the shader program failed, alert
 
     if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
-        alert('Unable to initialize the shader program: ' + gl.getProgramInfoLog(shaderProgram));
+        alert(
+            "Unable to initialize the shader program: " +
+            gl.getProgramInfoLog(shaderProgram)
+        );
         return null;
     }
 
@@ -289,10 +256,24 @@ function loadShader(gl, type, source) {
     // See if it compiled successfully
 
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        alert('An error occurred compiling the shaders: ' + gl.getShaderInfoLog(shader));
+        alert(
+            "An error occurred compiling the shaders: " + gl.getShaderInfoLog(shader)
+        );
         gl.deleteShader(shader);
         return null;
     }
 
     return shader;
+}
+window.addEventListener("resize", resize, false);
+
+function resize() {
+    w = window.innerWidth;
+    h = window.innerHeight;
+
+    gl.canvas.width = w;
+    gl.canvas.height = h;
+
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    render();
 }

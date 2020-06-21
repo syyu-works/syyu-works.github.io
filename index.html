@@ -2,42 +2,32 @@
 <html>
 
 <head>
-    <meta charset=utf-8>
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
     <title>BLM: The Meaningless Border</title>
-    <link rel="stylesheet" href="main/main.css">
+    <link rel="stylesheet" href="main/main.css" />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap");
     </style>
 </head>
 
 <body>
 
     <canvas id="glcanvas"></canvas>
+
+    <script src="main/frag.js"></script>
+    <script src="main/vert.js"></script>
+    <script src="main/gl-matrix.js"></script>
+    <script src="main/main.js"></script>
     <div class="cursor"></div>
-    <script>
-        const cursor = document.querySelector('.cursor')
-        document.addEventListener('mousemove', e => {
-            cursor.setAttribute("style", "top: " + e.pageY + "px; left: " + e.pageX + "px;")
-        })
-        document.addEventListener('click', () => {
-            cursor.classList.add("expand");
-            setTimeout(() => {
-                cursor.classList.remove("expand");
-            }, 500)
-        })
-    </script>
+    <script src="main/cursor.js"></script>
+
     <div id="BLM">
         <div>Black Lives Matter</div>
     </div>
     <div id="SY">
         <div>: The Meaningless Border</div>
     </div>
-    <script src="main/frag.js"></script>
-    <script src="main/vert.js"></script>
-    <script src="main/gl-matrix.js"></script>
-    <script src="main/main.js"></script>
-    <script src="main/cursor.js"></script>
 </body>
 
 </html>

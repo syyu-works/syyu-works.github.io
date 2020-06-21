@@ -31,11 +31,12 @@ h4 {
 
 .cursor {
     position: absolute;
-    width: 0px;
     margin-top: -200%;
+    width: 0;
     height: 1000%;
-    border-radius: 50%;
-    border: 1px solid black;
+    border-radius: 100%;
+    border: 1px solid gray;
+    opacity: 50%;
 }
 
 .expand {

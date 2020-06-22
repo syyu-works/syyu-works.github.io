@@ -1,3 +1,8 @@
+var g_points = [];
+var x1 = [];
+var a = [];
+var b = [];
+
 main();
 
 //
@@ -5,7 +10,7 @@ main();
 //
 
 function main() {
-    const canvas = document.getElementById("glcanvas");
+    var canvas = document.getElementById("glcanvas");
     const gl = canvas.getContext("webgl");
 
     if (!gl) {
@@ -61,32 +66,33 @@ function main() {
 
     var aVertexPosition = gl.getAttribLocation(shaderProgram, "aVertexPosition");
 
-    var g_points = []; // The array for the position of a mouse press
-
-    function click(ev, gl, canvas, a_Position) {
-        var x = ev.clientX; // x coordinate of a mouse pointer
-        var y = ev.clientY; // y coordinate of a mouse pointer
-        var rect = ev.target.getBoundingClientRect();
-        console.log(rect);
-    };
-
-    // console.log(gl);
-    // gl.canvas.onmousedown = function(ev) {
-    //   console.log(ev);
-    // };
-
     const buffers = initBuffers(gl);
 
-    drawScene(gl, programInfo, buffers);
+
+    gl.canvas.onmousedown = function(ev) {
+        var x1 = ev.clientX;
+        var y2 = ev.clientY;
+
+        var a = 2 * ((x1 / window.innerWidth) - 0.75);
+        var b = 3 * ((x1 / window.innerWidth) - 1);
+        drawScene(gl, programInfo, buffers, a);
+        requestAnimationFrame(update);
+    };
+
+
+    var update = function() {
+        // currentTranslate = drawScene(gl, programInfo, buffers);
+        requestAnimationFrame(update);
+    };
+    drawScene(gl, programInfo, buffers, 0);
+    //   requestAnimationFrame(update);
 }
 
 function initBuffers(gl) {
     const positionBuffer = gl.createBuffer();
 
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
-    const positions = [4.0, 5.0, -5.5, 5.0, 4.0, -5.0, -5.5, -5.0];
-
+    const positions = [4.6, 5.0, -5.5, 5.0, 4.6, -5.0, -5.5, -5.0];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
     var colors = [
@@ -118,12 +124,7 @@ function initBuffers(gl) {
     };
 }
 
-gl.canvas.onmousedown = function(ev) {
-    click(ev, gl, canvas, a_position);
-    drawScene();
-};
-
-function drawScene(gl, programInfo, buffers) {
+function drawScene(gl, programInfo, buffers, a) {
     gl.canvas.width = window.innerWidth;
     gl.canvas.height = window.innerHeight;
     gl.clearColor(0.0, 0.0, 0.0, 0.0); // Clear to black, fully opaque
@@ -137,19 +138,16 @@ function drawScene(gl, programInfo, buffers) {
     const fieldOfView = (45 * Math.PI) / 180; // in radians
     const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     const zNear = 0.1;
-    const zFar = 100.0;
+    const zFar = 10.0;
     const projectionMatrix = mat4.create();
 
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
     const modelViewMatrix = mat4.create();
 
-    // var translation = vec3.create();
-    //vec3.set(translation, [0.0, 0.0, -5.0])
-    mat4.translate(
-        modelViewMatrix, // destination matrix
-        modelViewMatrix, // matrix to translate
-        [0.0, 0.0, -5.0]); // amount to translate
+    console.log("IId");
+
+    mat4.translate(modelViewMatrix, modelViewMatrix, [-1.5 * a, 0.0, -5.0 - 2 * a]); // amount to translate
 
     {
         const numComponents = 2;

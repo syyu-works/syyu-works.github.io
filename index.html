@@ -1,12 +1,43 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
     <script src="p5.js"></script>
     <script src="p5.sound.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400&display=swap');
+    </style>
+    <title>the SUNSTONE by Seungyoon Yu</title>
 
-  </head>
-  <body>
+</head>
+
+<body>
     <script src="sketch.js"></script>
-  
+    <div id="cursor"> </div>
+    <a href="#">
+        <div class="dc"><span>
+            ❈
+        </span></div>
+        <div class="dc2">
+            &nbsp;&nbsp;Find your Destination
+        </div>
+    </a>
 
-</body></html>
+    <script src="cursor.js"></script>
+    <script>
+        const dcdc = document.querySelector(".dc");
+        document.addEventListener('click', () => {
+            dcdc.classList.add("expand");
+        })
+    </script>
+    <script src="text.js"></script>
+    <div id="title">
+        <div>The Sunstone</div>
+    </div>
+
+
+</body>
+
+</html>
